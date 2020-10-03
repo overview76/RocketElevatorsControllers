@@ -1,0 +1,28 @@
+pour faire des OBJ on doit faire des class et dans cette class on peut faire des def
+faire une class
+EX---- class le nom de la class
+		class allo:  (par EX)
+
+faire une def
+	EX--- def le nom de la def (self, et les parametre,.... ,.....): self est obligatoir!!!
+			...................
+				................
+			.................
+			
+faire une def init
+	EX def __init__(self): self est obligatoir!!!
+			...................
+				................
+			.................
+
+self ou self. == est un pointeur sur la class en sois
+
+print == print
+
+time.sleep = donner du temps entre les exec du  code ne pas oublier de faire import time!!!!
+
+str = pour changer une chaine de carataire en number
+
+len() = La fonction renvoie le nombre d'éléments d'un objet.
+
+ABS = nombre absolut 

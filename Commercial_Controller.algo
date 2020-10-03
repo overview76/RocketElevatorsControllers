@@ -1,0 +1,204 @@
+
+
+
+Elevator Status: moving / idle
+doors Status: open / close
+direction: UP or DOWN
+callbutton :up/down
+floorliste [0-65]
+floor[6-65]
+bassement[0-5]
+directionlist [ emthy ]
+backOrigin is floor[6]
+ElevatorList [0-11]
+    elevator1 = 0
+    elevator2 = 1
+    elevator3 = 2
+    elevator4 = 3
+    elevator5 = 4
+    elevator6 = 5
+    elevator7 = 6
+    elevator8 = 7
+    elevator9 = 8
+    elevator10 = 9
+    elevator11 = 10
+    elevator12 = 11
+
+battery
+colunm [0-3]
+    column1 = 0
+    column2 = 1
+    column3 = 2
+    column4 = 3
+
+elevator [0, 1, 2] are with the colunm [0]
+    this colunm is for the floor [0-6]
+
+elevator [3, 4, 5] are with the column [1]
+    this column is for the floor [6-25]
+
+elevator [6, 7, 8] are with the column [2]
+    this column is for the floor [26-45]
+
+elevator[9, 10, 11] are white the column [3]
+    this column is for the floor [46-65]
+
+
+
+
+SEQUENCE at 6 oclock AM
+    if all the elevator are empty 
+        call ElevatorList[3-11] to backOrigin
+    endif
+ENDSEQUENCE
+
+SEQUENCE at 5 oclock PM
+    if all the elevator in the colunm[0] are empty
+        call ElevatorList [0, 1, 2] to floor 0
+    endif    
+ENDSEQUENCE
+
+
+SEQUENCE panel on floor [6]
+input "which floors you wanna go?"
+    if the floor select is [0-5]
+        print "move to the column 1"
+        add the floors request to the derectionlist RETURN the request to the elevator [0, 1, 2]
+    endif
+
+    if the floor select is [7-25]
+        print "move to the column 2"
+        add the floors request to the derectionlist RETURN the request to the elevator [3, 4, 5]
+    endif
+
+    if the floor select is [26-45]
+        print "move to the column 3"
+        add the floors request to the derectionlist RETURN the request to the elevator [6, 7, 8]
+    endif
+
+    if the floor select is [46-65]
+        print "move to the column 4"
+        add the floors request to the derectionlist RETURN the request to the elevator [9, 10, 11]
+    endif
+ENDSEQUENCE
+
+SEQUENCE call form the pannel on floor [6]
+        if the floor select is [0-5]
+            call a request requestfloor and requestdirection RETURN the request to the elevator [0, 1, 2]
+            choose which elevator is the closest 
+            call status: moving and go to the call 
+            add request to derectionlist[] of the good elevator
+        endif
+
+        if the floor select is [7-25]
+            call a request requestfloor and requestdirection RETURN the request to the elevator [3, 4, 5]
+            choose which elevator is the closest 
+            call status: moving and go to the call
+            add request to derectionlist[] to the good elevator 
+        endif
+
+        if the floor select is [26-45]
+            call a request requestfloor and requestdirection RETURN the request to the elevator [6, 7, 8]
+            choose which elevator is the closest 
+            call status: moving and go to the call
+            add request to derectionlist[] to the good elevator 
+        endif
+
+        if the floor select is [46-65]
+            call a request requestfloor and requestdirection RETURN the request to the elevator [9, 10, 11]
+            choose which elevator is the closest 
+            call status: moving and go to the call
+            add request to derectionlist[] to the good elevator 
+        endif
+ENDSEQUENCE
+
+while SEQUENCE elevator_floor_munber DO
+    
+        WHEN elevator 1 is at floor[]
+        print floor[] "on sceen"
+        WHEN elevator 2 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 3 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 4 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 5 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 6 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 7 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 8 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 9 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 10 is at floor[]
+        print floor[] "on screen"
+        WHEN elevator 11 is at floor[]      
+        print floor[] "on screen"  
+        WHEN elevator 12 is at floor[]   
+        print floor[] "on screen"
+   
+Endwhile ENDSEQUENCE
+
+SEQUENCE when the elevator send by the call is arrive door
+    DoorStatus: open 
+    wait 10 seconds
+    DoorStatus: close 
+    read derectionlist[] 
+    execute derectionlist[] in order
+ENDSEQUENCE
+
+SEQUENCE when a button call elevator on a floor is preste doors
+    if the button prest is in floor [0-5] call column[0]
+        call a request requestfloor and requestdirection RETURN the request to the elevator
+        choose which elevator is the closest 
+        call status: moving and go to floor[6] 
+    endif
+
+    if the button prest is in floor [7-25] call column[1]
+        call a request requestfloor and requestdirection RETURN the request to the elevator
+        choose which elevator is the closest 
+        call status: moving and go to floor[6] 
+    endif
+
+    if the button prest is in floor [26-45] call column[2]
+        call a request requestfloor and requestdirection RETURN the request to the elevator
+        choose which elevator is the closest 
+        call status: moving and go to floor[6] 
+    endif
+
+    if the button prest is in floor [46-65] call column[3]
+        call a request requestfloor and requestdirection RETURN the request to the elevator
+        choose which elevator is the closest 
+        call status: moving and go to floor[6] 
+    endif
+ENDSEQUENCE
+
+SEQUENCE Weight Limit 
+    if Weight Limit reach (2500 pounds)
+        elevator stutus ible
+        while
+            print max
+            del
+            print Weight
+        Endwhile
+ENDSEQUENCE
+
+SEQUENCE RETURN
+    if a elevator stays more then 1200 seconds
+        elevator status moving TO [6]
+    else 
+        idle
+ENDSEQUENCE 
+
+
+
+
+
+
+
+
+
+
+

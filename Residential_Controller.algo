@@ -1,0 +1,275 @@
+"(Context)
+We are in a building who have. 
+\/
+2 elevators
+10 floors (without basment)
+
+-column(1)
+-elevators cage (2)
+-call panel (one for each floors)
+-doors (2 for each floors)
+-request panel (one for each elevators)
+"
+
+'For InitSystem
+SENQUENCE InitSystem
+
+	SET Battery Status = OPERATIONAL   
+	SET Elevator Status  = IDLE
+	SET InitElevators = 1 
+	SET Elevator Doors = Close
+	CALL OperateBattery
+
+END SEQUENCE
+
+'For CallElevatorBtn
+SEQUENCE CallElevatorBtn USING direction AND Floor
+
+	CALL FloorBtnLightOn WITH direction AND Floor
+	CALL FindBetterElevator WITH drection AND Floor RETURNING Elevator
+	CALL SendRequestElev WITH Floor AND Elevator
+	CALL CallBtnLightOn WITH RequestElevFloor RETURNING RequestedElevFloor
+	CALL SendRequestElev WITH floor AND RequestedElevFloor
+
+END SEQUENCE
+
+'For RequestElevFloor
+SEQUENCE RequestElevFloor USING RequestedElevFloor
+
+	CALL FloorRequestBtn WITH RequestedElevFloor
+	CALL SendRequestElev WITH RequestedElevFloor
+
+END SEQUENCE
+
+'For FindFloorRequestBtn
+SEQUENCE FindFloorRequestBtn USING FloorRequestedBtn
+
+	FOR EACH FloorRequestBtn in FloorRequestBtns
+		IF Floor = FloorRequestBtn THEN
+		RETURN FloorRequestBtn   
+		END If
+	END FOR
+
+END SEQUENCE
+
+'For FloorBtnLightOn
+SEQUENCE FloorBtnLightOn USING RequestedElevFloor
+
+	CALL FindFloorRequestBtn WITH RequestedElevFloor RETURNING FloorRequestBtn
+	SET FloorBtnLight to ON
+
+END SEQUENCE
+
+'For FloorBtnLightOff
+SEQUENCE FloorBtnLightOff USING RequestedElevFloor
+
+	CALL FindFloorRequestBtn WITH RequestedElevFloor RETURNING FloorRequestBtn
+	SET FloorBtnLight to OFF
+
+END SEQUENCE
+
+'For CallBtnLightOn
+SENQUENCE CallBtnLightOn USING RequestedElevFloor
+
+	CALL FindCallBtn WITH direction AND Floor RETURNING CallBtn
+	SET CallBtn Light On
+
+END SEQUENCE
+
+'For CallBtnLightOff
+SEQUENCE CallBtnLightOff  USING RequestedElevFloor
+
+	CALL FindCallBtn WITH direction AND Floor RETURNING CallBtn
+	SET CallBtnLightOff
+
+END SEQUENCE
+
+'For OpenDoors
+SEQUENCE OpenDoors
+
+	SET Doors = open
+	IF Doors = open THEN
+		INIT timer to 5 sec THEN
+		CALL CloseDoors
+   	END IF
+
+END SEQUENCE
+
+'For CloseDoors
+SEQUENCE CloseDoors
+
+	IF Doors is not obstruct
+		SET Doors TO close
+   	ELSE IF Doors is obstruct
+       	CALL OpenDoors
+	END IF
+
+END SEQUENCE
+
+'For MovingUpElevator
+SEQUENCE MovingUpElevator USING Elevator Floor AND Floor
+
+	FOR EACH Elevator in Elevators
+		IF Floor < Elevator Floor
+			INCREMENT Elevator Floor BY 1
+			REPEAT UNTIL Floor = Elevator Floor 
+		END IF
+   	END FOR
+
+END SEQUENCE
+
+'For MovingDownElevator
+SEQUENCE MovingDownElevator USING ElevatorFloor AND Floor
+
+	FOR EACH Elevator in Elevators
+		IF Floor > Elevator Floor
+        	DECREMENT Elevator Floor BY 1
+        	REPEAT UNTIL Floor = Elevator Floor 
+       	END IF
+   	END FOR
+
+END SEQUENCE
+
+'For SendRequestElev
+SEQUENCE SendRequestElev USING Floor AND Elevator
+
+	ADD CallBtnFloor OR RequestedElevFloor to FloorList THEN
+  	CALL SortList WITH Elevator direction AND Elevator FloorList RETURNING SortedFloorList
+  	SET Elevator FloorList To SortedFloorList
+
+END SEQUENCE
+
+'For FindFloorRequestBtn
+SEQUENCE FindFloorRequestBtn USING FloorRequestedBtn
+
+	FOR EACH FloorRequestBtn in FloorRequestBtns
+    	IF Floor = FloorRequestBtn THEN
+      		RETURN FloorRequestBtn   
+    	END If
+  	END FOR
+
+END SEQUENCE
+
+'For FindCallBtn
+SEQUENCE FindCallBtn USING direction AND Floor
+
+	FOR EACH  CallBtn in CallBtns
+    	IF direction = CallBtn Direction AND Floor = CallBtnFloor THEN
+      		RETURN CallBtn
+    	END IF
+  	END FOR
+
+END SEQUENCE
+
+'For FindBetterElevator
+SEQUENCE FindBetterElevator WITH direction AND Floor
+
+	FOR EACH Elevator in Elevators 
+		'first best option the Elevator is the same Floor and Doors is open
+   		If Floor  = Elevator Floor AND direction = Elevator direction AND  Elevator Status = STOPPED THEN     
+    		CALL SendRequestElev WITH Floor AND Elevator 
+   			RETURN Elevator
+		'second option for better Elevator if Elevator = IDLE
+  		ELSE IF Floor = Elevator Floor AND Elevator Status = IDLE THEN
+        	CALL SendRequestElev WITH Floor AND Elevator 
+    		RETURN Elevator
+		'third option for best elevator 
+  		ELSE IF Floor > Elevator Floor AND Elevator Status = MOVING OR STOPPED AND Elevator direction = UP  THEN
+    		CALL SendRequestElev WITH Floor AND Elevator 
+    		CALL FindNearestElev WITH Floor AND CageFloor AND direction RETURNING NearestElevator
+  			RETURN NearestElev
+		'fourth option for best elevator
+  		ELSE IF Floor < Elevator Floor AND Elevator Status = MOVING OR STOPPED AND Elevator direction = DOWN  THEN
+      		CALL SendRequestElev WITH Floor AND Elevator 
+      		CALL FindNearestElev WITH Floor AND CageFloor AND direction RETURNING NearestElevator
+    		RETURN NearestElev
+		'fifth option for the best elevator
+  		ELSE IF Elevator Status = IDLE THEN
+    		CALL SendRequestElev WITH Floor AND Elevator 
+    		RETURN Elevator
+        END IF
+  	END FOR
+	'call the sequence and returning the LeastBusy elevator
+   	CALL FindLeastBusyElev RETURNING LeastBusyElev
+   	RETURN LeastBusyElev
+
+END SEQUENCE
+
+'For MovingStatus
+SEQUENCE MovingStatus
+
+	SET Elevator Status TO MOVING
+
+END SEQUENCE
+
+'For IdleStatus
+SEQUENCE IdleStatus
+
+	SET Elevator Status  TO IDLE
+
+END SEQUENCE
+
+'For StoppedStatus
+SEQUENCE StoppedStatus
+
+	SET Elevator Status TO STOPPED
+
+END SEQUENCE
+
+'For FindLeastBusyElev
+SEQUENCE FindLeastBusyElev
+
+	SET ListLength TO TotalFloor
+	FOR EACH Elevator in Elevators 
+		IF ListLength > Length of Elevator FloorList
+     		SET ListLength TO length of Elevator FloorList
+    	END IF
+  		DETERMINE LeastBusyElev WITH ListLength
+   		RETURN LeastBusyElev
+  	END FOR
+
+END SEQUENCE
+
+'For SortList
+SEQUENCE SortList USING direction AND FloorList
+
+	SET FloorList to SortedFloorList
+		IF direction = UP THEN 
+      		COMPUTE CallBtnFloor TO ASCENDING
+		ELSE IF direction = DOWN THEN
+    		COMPUTE CallBtnFloor TO DESCENDING
+  			END IF
+	SET FloorList TO SortedFloorList
+  	RETURN SortedFloorList
+END SEQUENCE
+
+SEQUENCE FindNearestElev USING Floor AND CageFloor
+
+	COMPUTE RefGap AS BETWEEN Floor AND CageFloor 
+    SET ShortestGap = RefGap
+	FOR EACH Elevator in Elevators 
+    	IF Elevator direction = direction THEN
+			COMPUTE Gap AS DIFFERENCE BETWEEN Floor AND Elevator Floor
+     		IF Gap < ShortestGap
+        		SET ShortestGap = Gap
+    		END IF    
+    	END IF
+  	END FOR
+ 	DETERMINE NearestElev WITH ShortestGap
+    RETURN NearestElev
+
+END SEQUENCE
+
+'For ElevatorList
+SEQUENCE ElevatorList
+
+	FOR EACH elevator in Elevators
+		DETERMINE LeastBusy WITH ListLength
+		RETURN LeastBusy	
+	END FOR
+
+END SEQUENCE
+
+
+  
+
