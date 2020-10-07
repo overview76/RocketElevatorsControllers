@@ -1,197 +1,185 @@
+'-------DEFAULT PARAMETERS-------'
+'parameters by default when elevator start or reset'
+SEQUENCE Initialize 
+  SET floors TO 66
+  SET columns TO 4
+  SET elevator TO 12
+  SET sensor for maximum capacity
+  SET sensor for doors obstruction
+  SET maximum capacity TO 3 500 lbs
+  SET overweight_warning_alert TO Overweigt Capacity
+  SET elevator_queue TO null
+  SET elevator origin position TO 1 
+END SEQUENCE
 
+'---------------------- BUTTON CALL ELEVATOR-------------------------------
+'When a user call an elevator trigger call button'
+SEQUENCE call_Elevator USING direction AND requested_floor
+    CALL call_button WITH direction AND requested_floor RETURNING requested_floor
+    CALL batterie with column AND requested_floor RETURNING column
+    CALL find_elevator WITH column AND direction AND requested_floor RETURNING elevator
+    CALL move with direction AND requested_floor
+END SEQUENCE
 
+'---------------------- FIND CALL BUTTON'-------------------------------
+'The request is receive then if there's more demand, place the demand in queue'
+SEQUENCE call_button USING direction AND requested_floor
+        READ direction AND requested_floor 
+        IF more than one request THEN 
+        CALL queue WITH direction AND requested_floor RETURNING queue
+        ADD requested_floor TO elevator_queue THEN
+            return requested_floor
+END SEQUENCE
+'----------------------QUEUE------------------------------------'
+'As long as there is someone inside or in front of the elevator who wants to go in the current direction, continue in that direction'
+SEQUENCE queue USING direction AND requested_floor
+  WHILE queue in current direction THEN 
+    ADD new request in same direction
+      return queue
+  END WHILE
+END SEQUENCE
 
-Elevator Status: moving / idle
-doors Status: open / close
-direction: UP or DOWN
-callbutton :up/down
-floorliste [0-65]
-floor[6-65]
-bassement[0-5]
-directionlist [ emthy ]
-backOrigin is floor[6]
-ElevatorList [0-11]
-    elevator1 = 0
-    elevator2 = 1
-    elevator3 = 2
-    elevator4 = 3
-    elevator5 = 4
-    elevator6 = 5
-    elevator7 = 6
-    elevator8 = 7
-    elevator9 = 8
-    elevator10 = 9
-    elevator11 = 10
-    elevator12 = 11
+'---------------------- BATTERIES -------------------------------
+'batterie receive the signal and call to find the best column for the users'
+SEQUENCE batterie USING column AND requested_floor
+  CALL find_column WITH direction AND requested_floor RETURNING column
+END SEQUENCE
 
-battery
-colunm [0-3]
-    column1 = 0
-    column2 = 1
-    column3 = 2
-    column4 = 3
+'---------------------- FIND COLUMN -------------------------------
+SEQUENCE find_column USING elevator_floor AND requested_floor
+'calcul to find the average floor by column '
+  total_floor - total_basement / (total_column - 1) = average floor per column
 
-elevator [0, 1, 2] are with the colunm [0]
-    this colunm is for the floor [0-6]
+' x is the first floor  '
+  x = 1
+  WHILE x IS < number of column
+'It calculate what minimum floor to the maximum floor to serve'
 
-elevator [3, 4, 5] are with the column [1]
-    this column is for the floor [6-25]
-
-elevator [6, 7, 8] are with the column [2]
-    this column is for the floor [26-45]
-
-elevator[9, 10, 11] are white the column [3]
-    this column is for the floor [46-65]
-
-
-
-
-SEQUENCE at 6 oclock AM
-    if all the elevator are empty 
-        call ElevatorList[3-11] to backOrigin
-    endif
-ENDSEQUENCE
-
-SEQUENCE at 5 oclock PM
-    if all the elevator in the colunm[0] are empty
-        call ElevatorList [0, 1, 2] to floor 0
-    endif    
-ENDSEQUENCE
-
-
-SEQUENCE panel on floor [6]
-input "which floors you wanna go?"
-    if the floor select is [0-5]
-        print "move to the column 1"
-        add the floors request to the derectionlist RETURN the request to the elevator [0, 1, 2]
-    endif
-
-    if the floor select is [7-25]
-        print "move to the column 2"
-        add the floors request to the derectionlist RETURN the request to the elevator [3, 4, 5]
-    endif
-
-    if the floor select is [26-45]
-        print "move to the column 3"
-        add the floors request to the derectionlist RETURN the request to the elevator [6, 7, 8]
-    endif
-
-    if the floor select is [46-65]
-        print "move to the column 4"
-        add the floors request to the derectionlist RETURN the request to the elevator [9, 10, 11]
-    endif
-ENDSEQUENCE
-
-SEQUENCE call form the pannel on floor [6]
-        if the floor select is [0-5]
-            call a request requestfloor and requestdirection RETURN the request to the elevator [0, 1, 2]
-            choose which elevator is the closest 
-            call status: moving and go to the call 
-            add request to derectionlist[] of the good elevator
-        endif
-
-        if the floor select is [7-25]
-            call a request requestfloor and requestdirection RETURN the request to the elevator [3, 4, 5]
-            choose which elevator is the closest 
-            call status: moving and go to the call
-            add request to derectionlist[] to the good elevator 
-        endif
-
-        if the floor select is [26-45]
-            call a request requestfloor and requestdirection RETURN the request to the elevator [6, 7, 8]
-            choose which elevator is the closest 
-            call status: moving and go to the call
-            add request to derectionlist[] to the good elevator 
-        endif
-
-        if the floor select is [46-65]
-            call a request requestfloor and requestdirection RETURN the request to the elevator [9, 10, 11]
-            choose which elevator is the closest 
-            call status: moving and go to the call
-            add request to derectionlist[] to the good elevator 
-        endif
-ENDSEQUENCE
-
-while SEQUENCE elevator_floor_munber DO
+' calcul: The columns maximum floor to reach is equal to 1 * by average floor per column'
+    column number maximum floor to reach = x * average floor per column
     
-        WHEN elevator 1 is at floor[]
-        print floor[] "on sceen"
-        WHEN elevator 2 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 3 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 4 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 5 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 6 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 7 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 8 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 9 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 10 is at floor[]
-        print floor[] "on screen"
-        WHEN elevator 11 is at floor[]      
-        print floor[] "on screen"  
-        WHEN elevator 12 is at floor[]   
-        print floor[] "on screen"
-   
-Endwhile ENDSEQUENCE
+' calcul: The columns minimum floor to reach is equal to the last maximum floor to reach - average floor per column'
+    column number minimun floor to reach = maximum - average floor per column
 
-SEQUENCE when the elevator send by the call is arrive door
-    DoorStatus: open 
-    wait 10 seconds
-    DoorStatus: close 
-    read derectionlist[] 
-    execute derectionlist[] in order
-ENDSEQUENCE
+'x from the while loop is +=1 everytime' 
+    x += 1
+    
+      RETURN column
+    
+  END WHILE
+END SEQUENCE
 
-SEQUENCE when a button call elevator on a floor is preste doors
-    if the button prest is in floor [0-5] call column[0]
-        call a request requestfloor and requestdirection RETURN the request to the elevator
-        choose which elevator is the closest 
-        call status: moving and go to floor[6] 
-    endif
+'---------------------- FIND ELEVATOR -------------------------------
+SEQUENCE find_elevator USING column AND direction AND requested_floorF
 
-    if the button prest is in floor [7-25] call column[1]
-        call a request requestfloor and requestdirection RETURN the request to the elevator
-        choose which elevator is the closest 
-        call status: moving and go to floor[6] 
-    endif
+  FOR EACH elevator in elevator_list
 
-    if the button prest is in floor [26-45] call column[2]
-        call a request requestfloor and requestdirection RETURN the request to the elevator
-        choose which elevator is the closest 
-        call status: moving and go to floor[6] 
-    endif
+'if elevator is at the same floor and not busy'
+    IF requested_floor = elevator_floor AND elevator is idle THEN
+      RETURN elevator
+  
+'if the requested floor is the same as the elevator and the elevator current direction'
+    ELSE IF requested_floor = elevator_floor AND elevator_direction
+      RETURN elevator
 
-    if the button prest is in floor [46-65] call column[3]
-        call a request requestfloor and requestdirection RETURN the request to the elevator
-        choose which elevator is the closest 
-        call status: moving and go to floor[6] 
-    endif
-ENDSEQUENCE
+'if requested floor is higher and not busy than call the nearest elevator'
+      ELSE IF requested_floor > elevator_floor AND idle THEN
+        CALL nearest_elevator WITH requested_floor AND direction RETURNING nearest_elevator
+          RETURN nearest_elevator
 
-SEQUENCE Weight Limit 
-    if Weight Limit reach (2500 pounds)
-        elevator stutus ible
-        while
-            print max
-            del
-            print Weight
-        Endwhile
-ENDSEQUENCE
+'if requested floor is lower andnot busy than call the nearest elevator'
+      ELSE IF requested_floor < elevator_floor AND idle THEN
+        CALL nearest_elevator WITH requested_floor AND direction RETURNING nearest_elevator
+           RETURN nearest_elevator
 
-SEQUENCE RETURN
-    if a elevator stays more then 1200 seconds
-        elevator status moving TO [6]
-    else 
-        idle
-ENDSEQUENCE 
+'if requested floor is higher then the elevator and the elevator is moving in the same direction then call the nearest'
+    ELSE IF requested_floor > elevator_floor AND elevator is moving in same direction THEN
+      CALL nearest_elevator WITH  requested_floor AND direction RETURNING nearest_elevator
+          RETURN nearest_elevator
 
+'if requested floor is lower then the elevator and the elevator is moving in the same direction then call the nearest'
+      ELSE IF requested_floor < elevator_floor AND elevator is moving in same direction THEN
+        CALL nearest_elevator WITH  requested_floor AND direction RETURNING nearest_elevator
+          RETURN nearest_elevator
+
+'if elevator not busy then call nearest elevator'
+      ELSE elevator idle THEN
+        CALL nearest_elevator WITH requested_floor AND direction RETURNING nearest_elevator
+           RETURN elevator
+
+        END IF
+END SEQUENCE
+
+'---------------------- NEAREST ELEVATOR -------------------------------
+'calculate difference between requested floor AND elevator current floor'
+SEQUENCE nearest_elevator WITH requested_floor AND direction 
+    CALCULATE difference between requested_floor AND elevator_floor
+      RETURN nearest_elevator
+END SEQUENCE
+
+'---------------------- DOORS -------------------------------
+'open door for 5 sec then check if the sensor detect obstruction if yes open door for 5 sec if not close door  '
+SEQUENCE door USING elevator AND requested_floor
+    SET door TO open
+    SET timer TO 5 seconds THEN
+    CALL weight_check with sensor RETURNING weight_check
+
+    IF no obstruction THEN
+    CALL close_door
+
+    ELSE obstruction THEN
+    SET timer TO 5 seconds THEN
+    SET door TO close
+    END IF
+'if elevator queue is empty call the sequence return to origin'
+    IF elevator_queue is empty THEN
+    CALL return_to_origin WITH elevator
+    END IF
+    
+END SEQUENCE
+
+'---------------------- MOVE ELEVATOR -------------------------------
+SEQUENCE move USING direction AND requested_floor
+  'If elevator is lower then requested floor then move elevator up by 1 until elevator is equal to requested floor'
+    IF elevator_floor < requested_floor THEN
+    REPEAT
+
+    INCREMENT elevator_floor by 1
+    UNTIL elevator_floor EQUAL TO floor
+
+  'Else if elevator is higher then requested floor then move elevator down by -1 down until elevator is equal to requested floor'
+    ELSE IF elevator_floor > requested_floor THEN
+    REPEAT
+
+    INCREMENT elevator_floor by - 1
+    UNTIL elevator_floor EQUAL TO requested_floor
+
+    CALL door WITH elevator AND requested_floor
+
+    END IF
+END SEQUENCE
+
+
+'---------------------- OVERWEIGHT WARNING -------------------------------
+'If the sensor detect more thant maximum weight then display the message until weight in less tan maximum then open door '
+SEQUENCE weight_check USING sensor
+  READ weight FROM weight sensor
+  IF weight is > than maximum weight THEN
+  DISPLAY overweight_warning_alert
+  UNTIL weight is < Than maximum weight THEN 
+  SET door TO open
+    RETURN weight_check
+
+END SEQUENCE
+
+'---------------------- RETURN TO ORIGIN ----------------------------------
+'If elevator is not use since 15 min then set the elevator to origin position wich is floor 1'
+SEQUENCE return_to_origin USING elevator
+
+  IF elevator is not use since 15 minutes THEN 
+  SET elevator to origin positon WITH elevator
+  ENDIF
+END SEQUENCE
 
 
 

@@ -1,3 +1,9 @@
+//--------------Help Jean-Francois Taillefer Christ Saravia LOÏC RICO Anthony Pageau
+//-------------- Like on the video for C#  https://www.youtube.com/watch?v=GhQdlIFylQ8&t=13122s
+//-------------- Object whit C# https://www.w3schools.com/cs/default.asp
+//-------------- Make whit visual studio move on visual studio code  for the repo
+// The last week was hard but we stay positive
+// I love doing that I just have to put my 100% on it 
 
 using System;
 using System.Collections.Generic;
@@ -313,7 +319,7 @@ namespace myapp
         static void Main(string[] args)
         {
 
-            // elevators in columnOne (BASEMENT)
+            //ELEVATOR  C1
             Elevator elevator1 = new Elevator(1, "idle", -4, new List<int>());
             Elevator elevator2 = new Elevator(2, "idle", 1, new List<int>());
             Elevator elevator3 = new Elevator(3, "down", -5, new List<int>());
@@ -321,21 +327,21 @@ namespace myapp
             Elevator elevator5 = new Elevator(5, "down", -6, new List<int>());
 
 
-            // elevators in columnTwo
+            //ELEVATOR C2
             Elevator elevator6 = new Elevator(6, "down", 20, new List<int>());
             Elevator elevator7 = new Elevator(7, "up", 3, new List<int>());
             Elevator elevator8 = new Elevator(8, "down", 13, new List<int>());
             Elevator elevator9 = new Elevator(9, "down", 15, new List<int>());
             Elevator elevator10 = new Elevator(10, "down", 6, new List<int>());
 
-            // elevators in columnThree
+            // ELEVATOR C3
             Elevator elevator11 = new Elevator(11, "up", 1, new List<int>());
             Elevator elevator12 = new Elevator(12, "up", 23, new List<int>());
             Elevator elevator13 = new Elevator(13, "down", 33, new List<int>());
             Elevator elevator14 = new Elevator(14, "down", 40, new List<int>());
             Elevator elevator15 = new Elevator(15, "down", 39, new List<int>());
 
-            // elevators in columnFour
+            // ELEVATOR C4
             Elevator elevator16 = new Elevator(16, "down", 58, new List<int>());
             Elevator elevator17 = new Elevator(17, "up", 50, new List<int>());
             Elevator elevator18 = new Elevator(18, "up", 46, new List<int>());

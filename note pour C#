@@ -1,13 +1,55 @@
 class is a box how conten function and atribiute
 EX a class for a car 
-    atribiute
-            MAKE
-            Mobel
-            Color
-    function
-            Start()
-            Move()
+    atribiute
+            MAKE
+            Mobel
+            Color
+    function
+            Start()
+            Move()
 
 Namespace is for organize are class
 
 Assembly is for organize are Namespace
+
+console{
+Pour call la console = Console.WriteLine("Hello World"); 
+et pour garder la console open = Console.ReadLine() (le programe est en pause)
+
+}
+
+les variables{
+	les strings{ = des variable avec du text
+	string characterName = "john"
+	}
+	les integers { sont pour les variables avec des chiffre 
+	int charaterAge;
+	charaterAge = 21
+	}
+}
+cree des imputs{
+Pauser une question  reponse a notre user {
+	Console.write(); EX Cpmsp;e.Write("hello Sr/Mme please enter your floor: ");
+	}
+}
+
+les listes : on a la int liste et la string list
+int []  le nom de la liste = {}
+string []  le  nom de la liste = {}  
+
+
+cree un OBJ
+public class Voiture
+{
+    public int Vitesse { get; set; }
+
+    public Voiture()
+    {
+        Vitesse = 5;
+    }
+
+    public void Rouler()
+    {
+        Console.WriteLine("Je roule à " + Vitesse + " km/h");
+    }
+}
