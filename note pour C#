@@ -1,0 +1,13 @@
+class is a box how conten function and atribiute
+EX a class for a car 
+    atribiute
+            MAKE
+            Mobel
+            Color
+    function
+            Start()
+            Move()
+
+Namespace is for organize are class
+
+Assembly is for organize are Namespace
