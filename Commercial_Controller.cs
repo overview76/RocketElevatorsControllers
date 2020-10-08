@@ -5,9 +5,10 @@
 // The last week was hard but we stay positive
 // I love doing that I just have to put my 100% on it 
 
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 namespace myapp
 {
     // ------------------- Class Battery ---------------------------
@@ -287,7 +288,7 @@ namespace myapp
 
                 while (this.position > requestedFloor)
                     this.position -= 1;
-                Console.WriteLine("Elevator " + this.id + " move down to requested floor (" + this.position + ")");
+                Console.WriteLine("Elevator " + this.id + " move down to requested floor " + this.position );
             }
             if (this.position < requestedFloor)
             {
@@ -319,67 +320,67 @@ namespace myapp
         static void Main(string[] args)
         {
 
-            //ELEVATOR  C1
-            Elevator elevator1 = new Elevator(1, "idle", -4, new List<int>());
-            Elevator elevator2 = new Elevator(2, "idle", 1, new List<int>());
-            Elevator elevator3 = new Elevator(3, "down", -5, new List<int>());
-            Elevator elevator4 = new Elevator(4, "up", 1, new List<int>());
-            Elevator elevator5 = new Elevator(5, "down", -6, new List<int>());
+            // elevators in columnOne (BASEMENT)
+            Elevator elevatorA1 = new Elevator(1, "idle", -4, new List<int>());
+            Elevator elevatorA2 = new Elevator(2, "idle", 1, new List<int>());
+            Elevator elevatorA3 = new Elevator(3, "down", -5, new List<int>());
+            Elevator elevatorA4 = new Elevator(4, "up", 1, new List<int>());
+            Elevator elevatorA5 = new Elevator(5, "down", -6, new List<int>());
 
 
-            //ELEVATOR C2
-            Elevator elevator6 = new Elevator(6, "down", 20, new List<int>());
-            Elevator elevator7 = new Elevator(7, "up", 3, new List<int>());
-            Elevator elevator8 = new Elevator(8, "down", 13, new List<int>());
-            Elevator elevator9 = new Elevator(9, "down", 15, new List<int>());
-            Elevator elevator10 = new Elevator(10, "down", 6, new List<int>());
+            // elevators in columnTwo
+            Elevator elevatorB6 = new Elevator(6, "down", 20, new List<int>());
+            Elevator elevatorB7 = new Elevator(7, "up", 3, new List<int>());
+            Elevator elevatorB8 = new Elevator(8, "down", 13, new List<int>());
+            Elevator elevatorB9 = new Elevator(9, "down", 15, new List<int>());
+            Elevator elevatorB10 = new Elevator(10, "down", 6, new List<int>());
 
-            // ELEVATOR C3
-            Elevator elevator11 = new Elevator(11, "up", 1, new List<int>());
-            Elevator elevator12 = new Elevator(12, "up", 23, new List<int>());
-            Elevator elevator13 = new Elevator(13, "down", 33, new List<int>());
-            Elevator elevator14 = new Elevator(14, "down", 40, new List<int>());
-            Elevator elevator15 = new Elevator(15, "down", 39, new List<int>());
+            // elevators in columnThree
+            Elevator elevatorC11 = new Elevator(11, "up", 1, new List<int>());
+            Elevator elevatorC12 = new Elevator(12, "up", 23, new List<int>());
+            Elevator elevatorC13 = new Elevator(13, "down", 33, new List<int>());
+            Elevator elevatorC14 = new Elevator(14, "down", 40, new List<int>());
+            Elevator elevatorC15 = new Elevator(15, "down", 39, new List<int>());
 
-            // ELEVATOR C4
-            Elevator elevator16 = new Elevator(16, "down", 58, new List<int>());
-            Elevator elevator17 = new Elevator(17, "up", 50, new List<int>());
-            Elevator elevator18 = new Elevator(18, "up", 46, new List<int>());
-            Elevator elevator19 = new Elevator(19, "up", 1, new List<int>());
-            Elevator elevator20 = new Elevator(20, "down", 60, new List<int>());
+            // elevators in columnFour
+            Elevator elevatorD16 = new Elevator(16, "down", 58, new List<int>());
+            Elevator elevatorD17 = new Elevator(17, "up", 50, new List<int>());
+            Elevator elevatorD18 = new Elevator(18, "up", 46, new List<int>());
+            Elevator elevatorD19 = new Elevator(19, "up", 1, new List<int>());
+            Elevator elevatorD20 = new Elevator(20, "down", 60, new List<int>());
 
 
             // -------column-------
             //  (int id, List<Elevator> listElevInColumn, int maxFloor, int minFloor) 
             Column columnOne = new Column(1, new List<Elevator>(), 1, -6);
-            Column columnTwo = new Column(2, new List<Elevator>(), 20, 2);
+            Column columnTwo = new Column(2, new List<Elevator>(), 2, 20);
             Column columnThree = new Column(3, new List<Elevator>(), 40, 21);
             Column columnFour = new Column(4, new List<Elevator>(), 60, 41);
 
             // add the elevator in the list
-            columnOne.listElevInColumn.Add(elevator1);
-            columnOne.listElevInColumn.Add(elevator2);
-            columnOne.listElevInColumn.Add(elevator3);
-            columnOne.listElevInColumn.Add(elevator4);
-            columnOne.listElevInColumn.Add(elevator5);
+            columnOne.listElevInColumn.Add(elevatorA1);
+            columnOne.listElevInColumn.Add(elevatorA2);
+            columnOne.listElevInColumn.Add(elevatorA3);
+            columnOne.listElevInColumn.Add(elevatorA4);
+            columnOne.listElevInColumn.Add(elevatorA5);
 
-            columnTwo.listElevInColumn.Add(elevator6);
-            columnTwo.listElevInColumn.Add(elevator7);
-            columnTwo.listElevInColumn.Add(elevator8);
-            columnTwo.listElevInColumn.Add(elevator9);
-            columnTwo.listElevInColumn.Add(elevator10);
+            columnTwo.listElevInColumn.Add(elevatorB6);
+            columnTwo.listElevInColumn.Add(elevatorB7);
+            columnTwo.listElevInColumn.Add(elevatorB8);
+            columnTwo.listElevInColumn.Add(elevatorB9);
+            columnTwo.listElevInColumn.Add(elevatorB10);
 
-            columnThree.listElevInColumn.Add(elevator11);
-            columnThree.listElevInColumn.Add(elevator12);
-            columnThree.listElevInColumn.Add(elevator13);
-            columnThree.listElevInColumn.Add(elevator14);
-            columnThree.listElevInColumn.Add(elevator15);
+            columnThree.listElevInColumn.Add(elevatorC11);
+            columnThree.listElevInColumn.Add(elevatorC12);
+            columnThree.listElevInColumn.Add(elevatorC13);
+            columnThree.listElevInColumn.Add(elevatorC14);
+            columnThree.listElevInColumn.Add(elevatorC15);
 
-            columnFour.listElevInColumn.Add(elevator16);
-            columnFour.listElevInColumn.Add(elevator17);
-            columnFour.listElevInColumn.Add(elevator18);
-            columnFour.listElevInColumn.Add(elevator19);
-            columnFour.listElevInColumn.Add(elevator20);
+            columnFour.listElevInColumn.Add(elevatorD16);
+            columnFour.listElevInColumn.Add(elevatorD17);
+            columnFour.listElevInColumn.Add(elevatorD18);
+            columnFour.listElevInColumn.Add(elevatorD19);
+            columnFour.listElevInColumn.Add(elevatorD20);
 
             // -------battery-------
             // (int id, int nbOfColumnInBattery, int nbOfBasement, List<Column> listColumnInBattery)
@@ -393,17 +394,17 @@ namespace myapp
 
             // ------------------------------- SCENARIO 1 -------------------------------------------------
 
-            batteryOne.requestElevator(20, "up", 1);
-            Console.WriteLine("  ");
+            batteryOne.requestElevator(20, "down", 1);
+            Console.WriteLine("---------------------------");
             // ------------------------------- SCENARIO 2 -------------------------------------------------
             batteryOne.requestElevator(36, "up", 1);
-            Console.WriteLine("  ");
+            Console.WriteLine("---------------------------");
             // ------------------------------- SCENARIO 3 -------------------------------------------------
             batteryOne.requestElevator(1, "down", 54);
-            Console.WriteLine("  ");
+            Console.WriteLine("----------------------------");
             // ------------------------------- SCENARIO 4 -------------------------------------------------
             batteryOne.requestElevator(1, "up", -3);
-            Console.WriteLine("  ");
+            Console.WriteLine("----------------------------");
         }
     }
 }
